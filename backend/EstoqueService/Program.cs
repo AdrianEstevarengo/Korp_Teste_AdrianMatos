@@ -5,9 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Banco de dados (PostgreSQL via EF Core / Npgsql).
+// Banco de dados: SQLite por padrão (roda local sem Docker) ou PostgreSQL.
+// Selecione via configuração "Database:Provider" (Sqlite | Postgres).
+var dbProvider = builder.Configuration["Database:Provider"] ?? "Sqlite";
 builder.Services.AddDbContext<EstoqueDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+{
+    if (dbProvider.Equals("Postgres", StringComparison.OrdinalIgnoreCase))
+        options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+    else
+        options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+});
 
 // Serviços de domínio.
 builder.Services.AddScoped<IProdutoService, ProdutoService>();

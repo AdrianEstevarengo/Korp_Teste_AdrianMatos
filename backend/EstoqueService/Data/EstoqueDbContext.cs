@@ -21,10 +21,10 @@ public class EstoqueDbContext : DbContext
             e.Property(p => p.Saldo).IsRequired();
             e.HasIndex(p => p.Codigo).IsUnique();
 
-            // Controle de concorrência OTIMISTA usando a coluna de sistema xmin
-            // do PostgreSQL. Qualquer UPDATE concorrente sobre a mesma linha
-            // dispara DbUpdateConcurrencyException, que tratamos com retry.
-            e.UseXminAsConcurrencyToken();
+            // Controle de concorrência OTIMISTA compatível com SQLite e PostgreSQL:
+            // um token (RowVersion) atualizado a cada gravação. UPDATEs concorrentes
+            // sobre a mesma linha disparam DbUpdateConcurrencyException (tratada com retry).
+            e.Property(p => p.RowVersion).IsConcurrencyToken();
         });
 
         modelBuilder.Entity<RegistroIdempotencia>(e =>
@@ -35,5 +35,16 @@ public class EstoqueDbContext : DbContext
             e.Property(r => r.ResultadoJson).IsRequired();
             e.HasIndex(r => r.Chave).IsUnique();
         });
+    }
+
+    // Atualiza o token de concorrência sempre que um Produto é inserido ou alterado.
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<Produto>())
+        {
+            if (entry.State is EntityState.Added or EntityState.Modified)
+                entry.Entity.RowVersion = Guid.NewGuid();
+        }
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

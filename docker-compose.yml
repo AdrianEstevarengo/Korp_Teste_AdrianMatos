@@ -27,7 +27,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=db_estoque;Username=korp;Password=korp123"
+      Database__Provider: "Postgres"
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=db_estoque;Username=korp;Password=korp123"
       # Deixe a chave vazia para usar o gerador de IA em modo simulado (offline).
       # Preencha com uma chave OpenAI para usar IA real.
       Ia__ApiKey: ""
@@ -47,7 +48,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=db_faturamento;Username=korp;Password=korp123"
+      Database__Provider: "Postgres"
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=db_faturamento;Username=korp;Password=korp123"
       Servicos__EstoqueBaseUrl: "http://estoque-service:8080"
     ports:
       - "5002:8080"

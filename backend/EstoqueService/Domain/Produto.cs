@@ -16,4 +16,10 @@ public class Produto
 
     /// <summary>Quantidade disponível em estoque. Nunca pode ficar negativa.</summary>
     public int Saldo { get; set; }
+
+    /// <summary>
+    /// Token de concorrência otimista, compatível com SQLite e PostgreSQL.
+    /// É atualizado a cada gravação (ver EstoqueDbContext.SaveChangesAsync).
+    /// </summary>
+    public Guid RowVersion { get; set; }
 }
