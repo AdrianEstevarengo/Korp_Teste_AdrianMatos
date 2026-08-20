@@ -116,9 +116,8 @@ Korp_Teste_AdrianMatos/
 │   └── FaturamentoService/      # Microsserviço de Faturamento (notas fiscais)
 ├── frontend/                    # SPA Angular 17
 ├── docker-compose.yml           # Orquestra Postgres + 2 serviços + Angular
-├── DETALHAMENTO_TECNICO.md      # Detalhamento técnico exigido pelo desafio
-├── ROTEIRO_VIDEO.md             # Roteiro sugerido para o vídeo de apresentação
-└── README.md
+├── KorpTeste.sln                # Solução Visual Studio
+└── README.md                    # Documentação do projeto
 ```
 
 ---
